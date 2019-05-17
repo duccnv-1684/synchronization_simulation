@@ -6,8 +6,9 @@ public class Main {
         DemoSynchronization demoSynchronization = new DemoSynchronization();
         demoSynchronization.prepareDemo(10);
         demoSynchronization.startDemo();
+        demoSynchronization.initRing();
         try {
-            Thread.sleep(2000);
+            Thread.sleep(500000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

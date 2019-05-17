@@ -3,34 +3,39 @@ package com.ducnguyen;
 import java.util.*;
 
 class DemoSynchronization {
-    private Set<Peer> peers = new HashSet<>();
+    private Set<Host> mHosts = new HashSet<>();
 
     void prepareDemo(int numberClients) {
         for (int i = 0; i < numberClients; i++) {
-            Peer peer = new Peer();
-            peer.setName(UUID.randomUUID().toString());
-            peers.add(peer);
+            Host host = new Host();
+            host.setName(i+"");
+            mHosts.add(host);
         }
-        for (Peer peer : peers) {
-            peer.setPeers(peers);
+        for (Host host : mHosts) {
+            host.setHosts(mHosts);
         }
     }
 
 
     void startDemo() {
-        for (Peer peer : peers) {
-            peer.start();
+        for (Host host : mHosts) {
+            host.start();
         }
-        List<Peer> peerList = new ArrayList<>(peers);
-        for (int i = 0; i < 5; i++) {
-            String message = "Message from " + peerList.get(i).getName() + "to " + peerList.get(i + 3).getName();
-            peerList.get(i).sendMessage(message, peerList.get(i + 3));
+//        List<Host> hostList = new ArrayList<>(mHosts);
+//        for (int i = 0; i < 5; i++) {
+//            String message = "Message from " + hostList.get(i).getName() + "to " + hostList.get(i + 3).getName();
+//            hostList.get(i).sendMessage(message, hostList.get(i + 3));
+//        }
+    }
+    void initRing(){
+        for (Host host : mHosts) {
+            host.initRing();
         }
     }
 
     void stopDemo() {
-        for (Peer peer : peers) {
-            peer.interrupt();
+        for (Host host : mHosts) {
+            host.interrupt();
         }
     }
 }
