@@ -3,34 +3,52 @@ package com.ducnguyen;
 import java.util.*;
 
 class DemoSynchronization {
-    private Set<Peer> peers = new HashSet<>();
+    private Set<Host> hosts = new HashSet<>();
+    private List<String> id;
+    private String trueCoordinator;
 
     void prepareDemo(int numberClients) {
+        id = new ArrayList<>();
         for (int i = 0; i < numberClients; i++) {
-            Peer peer = new Peer();
-            peer.setName(UUID.randomUUID().toString());
-            peers.add(peer);
+            Host host = new Host();
+            String hostId = UUID.randomUUID().toString();
+//            String hostId = i + "";
+            host.setName(hostId);
+            id.add(hostId);
+            System.out.println("Host " + host.getName() + " is init");
+            hosts.add(host);
         }
-        for (Peer peer : peers) {
-            peer.setPeers(peers);
+        Collections.sort(id);
+        trueCoordinator = id.get(id.size() - 1);
+        for (Host host : hosts) {
+            host.setHosts(hosts);
+            host.trueCoordinator = this.trueCoordinator;
         }
     }
 
 
     void startDemo() {
-        for (Peer peer : peers) {
-            peer.start();
+        for (Host host : hosts) {
+            host.start();
         }
-        List<Peer> peerList = new ArrayList<>(peers);
-        for (int i = 0; i < 5; i++) {
-            String message = "Message from " + peerList.get(i).getName() + "to " + peerList.get(i + 3).getName();
-            peerList.get(i).sendMessage(message, peerList.get(i + 3));
-        }
+        System.out.println("True coordinator is " + trueCoordinator);
     }
 
     void stopDemo() {
-        for (Peer peer : peers) {
-            peer.interrupt();
+        for (Host host : hosts) {
+            host.interrupt();
+        }
+    }
+
+    void findCoordinator() {
+        for (Host host : hosts) {
+            host.findCoordinator();
+        }
+    }
+
+    void getCoordinator() {
+        for (Host host : hosts) {
+            host.getCoordinator();
         }
     }
 }
